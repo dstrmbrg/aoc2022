@@ -19,45 +19,35 @@ defmodule Day02 do
     }
   }
 
-  def part1() do
+  def part1(), do: solve(&(parse_strategy_one(&1)))
+  def part2(), do: solve(&(parse_strategy_two(&1)))
+
+  def solve(parsefn) do
     InputReader.read(2)
-    |> parse_strategy_one()
+    |> parsefn.()
     |> Enum.map(&(calc_score(&1)))
     |> Enum.sum()
     |> IO.puts()
   end
 
-  def part2() do
-    InputReader.read(2)
-    |> parse_strategy_two()
-    |> Enum.map(&(calc_score_two(&1)))
-    |> Enum.sum()
-    |> IO.puts()
-  end
-
-  defp calc_score(round), do: round_outcome_score(round) + @moves[round[:response]][:score]
-
-  defp calc_score_two(round) do
+  defp calc_score(%{opponent: _, response: _} = round), do: round_outcome_score(round) + @moves[round.response].score
+  defp calc_score(%{opponent: _, outcome: _} = round) do
     move = get_move(round)
-    round_outcome_score_two(round[:outcome]) + @moves[move][:score]
+    round_outcome_score(%{opponent: round.opponent, response: move}) + @moves[move].score
   end
 
   defp round_outcome_score(%{opponent: o, response: r }) when o == r, do: @draw_score
-  defp round_outcome_score(%{opponent: o, response: r}), do: if @moves[r][:beats] == o, do: @win_score, else: @loss_score
-
-  defp round_outcome_score_two(:lose), do: @loss_score
-  defp round_outcome_score_two(:draw), do: @draw_score
-  defp round_outcome_score_two(:win), do: @win_score
+  defp round_outcome_score(%{opponent: o, response: r}), do: if @moves[r].beats == o, do: @win_score, else: @loss_score
 
   def get_move(round) do
     case round.outcome do
-      :lose -> @moves[round.opponent][:beats]
+      :lose -> @moves[round.opponent].beats
       :draw -> round.opponent
       :win -> get_winning_move(round.opponent)
     end
   end
 
-  defp get_winning_move(opponent), do: Enum.find(@moves, fn {_key, val} -> val[:beats] == opponent end) |> elem(0)
+  defp get_winning_move(opponent), do: Enum.find(@moves, fn {_key, val} -> val.beats == opponent end) |> elem(0)
 
   defp parse_strategy_one(input) do
     input
