@@ -1,18 +1,13 @@
 defmodule Day04 do
 
-  def part1() do
-    InputReader.read(4)
-    |> parse()
-    |> Enum.map(fn [first, second] -> [first, second, first ++ second |> Enum.uniq() |> Enum.sort()] end)
-    |> Enum.count(fn [first, second, combined] -> first == combined or second == combined end)
-    |> IO.puts()
-  end
+  def part1(), do: solve(fn [first, second, combined] -> first == combined or second == combined end)
+  def part2(), do: solve(fn [first, second, combined] -> length(first) + length(second) != length(combined) end)
 
-  def part2() do
+  defp solve(countfn) do
     InputReader.read(4)
     |> parse()
     |> Enum.map(fn [first, second] -> [first, second, first ++ second |> Enum.uniq() |> Enum.sort()] end)
-    |> Enum.count(fn [first, second, combined] -> length(first) + length(second) != length(combined) end)
+    |> Enum.count(countfn)
     |> IO.puts()
   end
 
