@@ -1,23 +1,21 @@
 defmodule Day07 do
-  def part1() do
-    InputReader.read(7)
+  def part1(input) do
+    input
     |> parse()
     |> get_all_sizes()
     |> Enum.filter(&(&1 <= 100_000))
     |> Enum.sum()
-    |> IO.puts()
   end
 
-  def part2() do
-    InputReader.read(7)
+  def part2(input) do
+    input
     |> parse()
     |> find_smallest_to_delete()
-    |> IO.puts()
   end
 
   defp parse(input) do
     input
-    |> String.split("\r\n")
+    |> String.split(~r/\R/)
     |> Enum.reduce(%{current_path: [], system: %{size: 0, files: []}}, &(parse_row(&1, &2)))
   end
 

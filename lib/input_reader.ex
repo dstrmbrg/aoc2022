@@ -1,6 +1,8 @@
 defmodule InputReader do
-  def read(day) do
+  def read(day, test) do
     day_string = String.pad_leading(Integer.to_string(day), 2, "0")
-    File.read!("./lib/inputs/day#{day_string}.txt")
+    file_name = if test, do: "test", else: "input"
+
+    File.read!("./lib/day#{day_string}/#{file_name}")
   end
 end

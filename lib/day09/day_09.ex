@@ -1,17 +1,16 @@
 defmodule Day09 do
-  def part1(), do: solve(2)
-  def part2(), do: solve(10)
+  def part1(input), do: input |> solve(2)
+  def part2(input), do: input |> solve(10)
 
-  defp solve(rope_length) do
+  defp solve(input, rope_length) do
     rope = List.duplicate(%{x: 0, y: 0}, rope_length)
 
-    InputReader.read(9)
+    input
     |> parse()
     |> Enum.reduce(%{rope: rope, tail_path: []}, &(next_state(&2, &1)))
     |> Map.get(:tail_path)
     |> Enum.uniq()
     |> length()
-    |> IO.puts()
   end
 
   defp next_state(state, %{direction: direction, steps: steps}) do
@@ -50,7 +49,7 @@ defmodule Day09 do
 
   defp parse(input) do
     input
-    |> String.split("\r\n")
+    |> String.split(~r/\R/)
     |> Enum.map(fn line -> String.split(line) |> then(&(%{direction: Enum.at(&1, 0), steps: Enum.at(&1, 1) |> String.to_integer()})) end)
   end
 end

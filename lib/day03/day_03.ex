@@ -1,16 +1,15 @@
 defmodule Day03 do
-  def part1() do
-    InputReader.read(3)
+  def part1(input) do
+    input
     |> parse()
     |> Enum.map(&(Enum.chunk_every(&1, div(length(&1), 2))))
     |> Enum.map(fn [first, second] -> MapSet.intersection(MapSet.new(first), MapSet.new(second)) |> MapSet.to_list() end)
     |> Enum.map(&(get_priority(&1)))
     |> Enum.sum()
-    |> IO.puts()
   end
 
-  def part2() do
-    InputReader.read(3)
+  def part2(input) do
+    input
     |> parse()
     |> Enum.chunk_every(3)
     |> Enum.map(fn [first, second, third] ->
@@ -19,12 +18,11 @@ defmodule Day03 do
       |> MapSet.to_list() end)
     |> Enum.map(&(get_priority(&1)))
     |> Enum.sum()
-    |> IO.puts()
   end
 
   defp parse(input) do
     input
-    |> String.split("\r\n")
+    |> String.split(~r/\R/)
     |> Enum.map(&(String.to_charlist(&1)))
   end
 

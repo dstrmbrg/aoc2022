@@ -1,13 +1,12 @@
 defmodule Day06 do
 
-  def part1(), do: solve(4)
-  def part2(), do: solve(14)
+  def part1(input), do: input |> solve(4)
+  def part2(input), do: input |> solve(14)
 
-  defp solve(marker_length) do
-    InputReader.read(6)
+  defp solve(input, marker_length) do
+    input
     |> to_charlist()
     |> find_marker(marker_length)
-    |> IO.puts()
   end
 
   defp find_marker(list, marker_length) do

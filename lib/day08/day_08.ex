@@ -1,8 +1,6 @@
 defmodule Day08 do
-  def part1() do
-    tensor =
-      InputReader.read(8)
-      |> parse()
+  def part1(input) do
+    tensor = parse(input)
 
     [
       tensor |> required_height(),
@@ -15,25 +13,20 @@ defmodule Day08 do
     |> Nx.sum()
     |> Nx.to_flat_list()
     |> hd()
-    |> IO.puts()
   end
 
-  def part2() do
-    tensor =
-      InputReader.read(8)
-      |> parse()
-
+  def part2(input) do
+    tensor = parse(input)
     {height, width} = tensor.shape()
 
     (for x <- Enum.to_list(1..width - 2), y <- Enum.to_list(1..height - 2), do:
       scenic_score(tensor, x, y))
       |> Enum.max()
-      |> IO.puts()
   end
 
   defp parse(input) do
     input
-    |> String.split("\r\n")
+    |> String.split(~r/\R/)
     |> Enum.reduce([], fn row, acc -> acc ++ [row |> String.graphemes() |> Enum.map(&String.to_integer/1)] end)
     |> Nx.tensor()
   end
